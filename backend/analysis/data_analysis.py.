@@ -1,0 +1,35 @@
+import pandas as pd
+
+# 1. Simulating Data Extraction (The 'Extract' part of ETL)
+# In a real BI/DW role, this would come from your SQL database
+data = {
+    'Task_ID': [101, 102, 103, 104, 105],
+    'Task_Name': ['Weather App', 'SQL Portfolio', 'E-Commerce App', 'Bug Fix', 'Data Cleaning'],
+    'Priority': ['High', 'High', 'Medium', 'Low', 'High'],
+    'Status': ['Completed', 'In Progress', 'Completed', 'Pending', 'In Progress'],
+    'Hours_Estimated': [10, 5, 20, 2, 8],
+    'Hours_Actual': [12, 4, 18, 0, 6]
+}
+
+# 2. Loading into a DataFrame
+df = pd.DataFrame(data)
+
+# 3. Data Transformation: Calculate Efficiency (Actual vs Estimated)
+df['Efficiency_Gap'] = df['Hours_Actual'] - df['Hours_Estimated']
+
+# 4. BI Insight: Identifying High Priority Bottlenecks
+# This is what a BI Trainee does to provide value to a manager
+bottlenecks = df[(df['Priority'] == 'High') & (df['Status'] != 'Completed')]
+
+print("--- BI Report: High Priority Pending Tasks ---")
+print(bottlenecks[['Task_Name', 'Hours_Estimated', 'Hours_Actual']])
+
+# 5. Data Aggregation: Summary by Status
+status_summary = df.groupby('Status')['Hours_Actual'].sum()
+
+print("\n--- Summary: Total Hours Spent by Status ---")
+print(status_summary)
+
+# 6. Exporting to CSV (The 'Load' part of ETL)
+df.to_csv('task_productivity_report.csv', index=False)
+print("\nSuccess: 'task_productivity_report.csv' generated for stakeholders.")
