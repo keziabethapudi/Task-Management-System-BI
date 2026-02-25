@@ -1,0 +1,21 @@
+from django.db import models
+from django.contrib.auth.models import User
+
+# This defines the "Task" structure in Python
+class Task(models.Model):
+    # [span_1](start_span)Connects the task to a specific user[span_1](end_span)
+    user = models.ForeignKey(User, on_user_id=models.CASCADE, null=True, blank=True)
+    title = models.CharField(max_length=200)
+    description = models.TextField(null=True, blank=True)
+    
+    # [span_2](start_span)Tracks if the task is finished[span_2](end_span)
+    complete = models.BooleanField(default=False)
+    
+    # [span_3](start_span)Tracks the deadline[span_3](end_span)
+    created = models.DateTimeField(auto_now_add=True)
+
+    def _str_(self):
+        return self.title
+
+    class Meta:
+        ordering = ['complete']
